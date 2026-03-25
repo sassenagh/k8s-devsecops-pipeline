@@ -46,6 +46,11 @@ jobs:
       - name: Port-forward to pod
         run: kubectl port-forward svc/vulnerable-app 3000:80 &
 
+      - name: Prepare ZAP report directory
+        run: |
+          mkdir -p /tmp/zap_reports
+          chmod 777 /tmp/zap_reports
+
       - name: DAST - ZAP Baseline Scan
         run: |
           docker run --rm \
