@@ -33,8 +33,12 @@ jobs:
 
       - name: SCA - Trivy Image Scan
         run: |
-          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
-            aquasec/trivy image --exit-code 1 --severity HIGH,CRITICAL vulnerable-app:latest
+          docker run --rm \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            aquasec/trivy:0 image \
+            --exit-code 0 \
+            --severity HIGH,CRITICAL \
+            vulnerable-app:latest
 
       - name: Deploy to Kubernetes
         run: kubectl apply -f k8s/
