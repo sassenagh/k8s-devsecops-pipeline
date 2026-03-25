@@ -43,6 +43,13 @@ jobs:
       - name: Deploy to Kubernetes
         run: kubectl apply -f k8s/
 
+      - name: ZAP DAST (Puerto 19999)
+        run: |
+          for p in 3000 8080 9090 9191 9292 5000; do
+            lsof -ti :$p | xargs kill -9 || true
+          done
+          lsof -i :19999 || echo "19999 Free port"
+
       - name: Port-forward to pod
         run: kubectl port-forward svc/vulnerable-app 9090:80 &
 
