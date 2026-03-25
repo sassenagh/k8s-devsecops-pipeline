@@ -54,7 +54,7 @@ jobs:
         run: |
           docker run --rm \
             -v /tmp/zap_reports:/zap/wrk \
-            ghcr.io/zaproxy/zaproxy:stable \
+            ghcr.io/zaproxy/zaproxy:2.13.0 \
             zap-baseline.py \
               -t http://host.docker.internal:9090 \
               -r /zap/wrk/report.html \
