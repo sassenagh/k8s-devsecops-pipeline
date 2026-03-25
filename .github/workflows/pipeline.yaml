@@ -43,24 +43,20 @@ jobs:
       - name: Deploy to Kubernetes
         run: kubectl apply -f k8s/
 
-      - name: Port-forward to pod
-        run: kubectl port-forward svc/vulnerable-app 9090:80 &
-
       - name: Prepare ZAP report directory
         run: |
           mkdir -p /tmp/zap_reports
           chmod 777 /tmp/zap_reports
           kubectl port-forward svc/vulnerable-app 9090:80 &
-          sleep 15
+          sleep 10
 
       - name: DAST - ZAP Baseline Scan
         run: |
           docker run --rm \
-            --network host \
             -v /tmp/zap_reports:/zap/wrk \
             ghcr.io/zaproxy/zaproxy:stable \
             zap-baseline.py \
-              -t http://localhost:9090 \
+              -t http://host.docker.internal:9090 \
               -r /zap/wrk/report.html \
               --autooff
 
