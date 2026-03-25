@@ -51,7 +51,7 @@ jobs:
           mkdir -p /tmp/zap_reports
           chmod 777 /tmp/zap_reports
           kubectl port-forward svc/vulnerable-app 3000:80 &
-          sleep 10
+          sleep 15
 
       - name: DAST - ZAP Baseline Scan
         run: |
@@ -61,7 +61,8 @@ jobs:
             ghcr.io/zaproxy/zaproxy:stable \
             zap-baseline.py \
               -t http://localhost:3000 \
-              -r /zap/wrk/report.html[web:21]
+              -r /zap/wrk/report.html \
+              --autooff
 
       - name: Show ZAP report
         run: |
