@@ -58,11 +58,10 @@ jobs:
           docker run --rm \
             --network host \
             -v /tmp/zap_reports:/zap/wrk \
-            ghcr.io/zaproxy/zaproxy:2.16.0-jdk17 \
+            ghcr.io/zaproxy/zaproxy:stable \
             zap-baseline.py \
               -t http://localhost:3000 \
-              -r /zap/wrk/report.html \
-              --format html
+              -r /zap/wrk/report.html[web:21]
 
       - name: Show ZAP report
         run: |
