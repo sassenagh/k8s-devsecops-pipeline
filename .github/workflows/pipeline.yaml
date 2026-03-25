@@ -1,0 +1,43 @@
+name: DevSecOps Pipeline
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - Dockerfile
+      - "app/**"
+      - "k8s/**"
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: SAST - Semgrep
+        run: |
+          pip install semgrep
+          semgrep scan --config auto
+
+      - name: Build Docker image
+        run: docker build -t vulnerable-app:latest .
+
+      - name: SCA - Trivy Image Scan
+        run: |
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
+            aquasec/trivy image --exit-code 1 --severity HIGH,CRITICAL vulnerable-app:latest
+
+      - name: Deploy to Kubernetes
+        run: kubectl apply -f k8s/
+
+      - name: Port-forward to pod
+        run: kubectl port-forward svc/vulnerable-app 3000:80 &
+
+      - name: DAST - ZAP Baseline Scan
+        run: |
+          docker run --network host owasp/zap2docker-stable \
+            zap-baseline.py -t http://localhost:3000 -r report.html
