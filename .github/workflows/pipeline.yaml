@@ -49,5 +49,10 @@ jobs:
       - name: DAST - ZAP Baseline Scan
         run: |
           docker run --rm \
+            -v /tmp/zap_reports:/zap/wrk \
             ghcr.io/zaproxy/zaproxy:stable \
-            zap-baseline.py -t http://host.docker.internal:3000 -r report.html
+            zap-baseline.py -t http://host.docker.internal:3000 -r /zap/wrk/report.html
+
+      - name: Show ZAP report
+        run: |
+          cat /tmp/zap_reports/report.html
