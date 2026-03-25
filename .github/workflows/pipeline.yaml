@@ -44,13 +44,13 @@ jobs:
         run: kubectl apply -f k8s/
 
       - name: Port-forward to pod
-        run: kubectl port-forward svc/vulnerable-app 3000:80 &
+        run: kubectl port-forward svc/vulnerable-app 8080:80 &
 
       - name: Prepare ZAP report directory
         run: |
           mkdir -p /tmp/zap_reports
           chmod 777 /tmp/zap_reports
-          kubectl port-forward svc/vulnerable-app 3000:80 &
+          kubectl port-forward svc/vulnerable-app 8080:80 &
           sleep 15
 
       - name: DAST - ZAP Baseline Scan
@@ -60,7 +60,7 @@ jobs:
             -v /tmp/zap_reports:/zap/wrk \
             ghcr.io/zaproxy/zaproxy:stable \
             zap-baseline.py \
-              -t http://localhost:3000 \
+              -t http://localhost:8080 \
               -r /zap/wrk/report.html \
               --autooff
 
