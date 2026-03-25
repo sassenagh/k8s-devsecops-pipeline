@@ -51,13 +51,13 @@ jobs:
           lsof -i :19999 || echo "19999 Free port"
 
       - name: Port-forward to pod
-        run: kubectl port-forward svc/vulnerable-app 9090:80 &
+        run: kubectl port-forward svc/vulnerable-app 19999:80 &
 
       - name: Prepare ZAP report directory
         run: |
           mkdir -p /tmp/zap_reports
           chmod 777 /tmp/zap_reports
-          kubectl port-forward svc/vulnerable-app 9090:80 &
+          kubectl port-forward svc/vulnerable-app 19999:80 &
           sleep 15
 
       - name: DAST - ZAP Baseline Scan
