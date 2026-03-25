@@ -24,7 +24,10 @@ jobs:
           python3 --version
 
       - name: SAST - Semgrep
-        uses: returntocorp/semgrep-action@v1
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install --user semgrep
+          ~/.local/bin/semgrep scan --config auto
 
       - name: Build Docker image
         run: docker build -t vulnerable-app:latest .
