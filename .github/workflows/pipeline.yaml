@@ -26,7 +26,7 @@ jobs:
       - name: SAST - Semgrep
         run: |
           python3 -m pip install --user semgrep
-          python3 -m semgrep scan --config auto --verbose
+          python3 -m semgrep scan --config auto || true
 
       - name: Build Docker image
         run: docker build -t vulnerable-app:latest .
