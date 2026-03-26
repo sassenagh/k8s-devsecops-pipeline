@@ -57,7 +57,7 @@ jobs:
           docker run --rm \
             --network host \
             -v /tmp/zap_reports:/zap/wrk \
-            ghcr.io/zaproxy/zaproxy:weekly \
+            ghcr.io/zaproxy/zaproxy:2.15.0 \
             zap-baseline.py \
               -t http://127.0.0.1:9090 \
               -r /zap/wrk/report.html \
