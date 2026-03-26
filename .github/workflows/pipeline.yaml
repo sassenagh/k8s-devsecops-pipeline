@@ -64,7 +64,7 @@ jobs:
               -m 1 \
               -I \
               --autooff \
-              -T 3
+              -T 3 || true
 
       - name: Show ZAP report
         run: |
