@@ -47,8 +47,8 @@ jobs:
         run: |
           mkdir -p /tmp/zap_reports
           chmod 777 /tmp/zap_reports
-          kubectl port-forward svc/vulnerable-app 9090:80 &
-          sleep 10
+          kubectl port-forward --address 0.0.0.0 svc/vulnerable-app 9090:80 &
+          sleep 20
           curl -f http://127.0.0.1:9090 || (echo "Service is NOT running"; exit 1)
           echo "Service is up and running"
 
@@ -63,6 +63,7 @@ jobs:
               -t http://127.0.0.1:9090 \
               -w /zap/wrk/report.md \
               -J /zap/wrk/report.json \
+              -d \  
               -m 2 \
               -I \
               --autooff \
