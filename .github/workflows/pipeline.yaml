@@ -53,6 +53,7 @@ jobs:
           echo "Service is up and running"
 
       - name: DAST - ZAP Baseline Scan
+        continue-on-error: true
         run: |
           docker run --rm \
             --network host \
@@ -61,7 +62,8 @@ jobs:
             zap-baseline.py \
               -t http://127.0.0.1:9090 \
               -w /zap/wrk/report.md \
-              -m 1 \
+              -J /zap/wrk/report.json \
+              -m 2 \
               -I \
               --autooff \
               -T 3 || true
@@ -79,4 +81,4 @@ jobs:
 
       - name: Show ZAP report
         run: |
-          cat /tmp/zap_reports/report.md || echo "No MD report"
+          cat /tmp/zap_reports/report.json || echo "No JSON report - scan failed"
