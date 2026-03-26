@@ -72,7 +72,7 @@ jobs:
           echo "Report saved"
 
       - name: Upload Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: zap-security-report
           path: /tmp/zap_reports/
